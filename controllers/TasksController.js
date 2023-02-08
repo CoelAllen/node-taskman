@@ -2,12 +2,12 @@ const getAllTasks = (req, res) => {
   res.send("all items from TasksController");
 };
 
-const getTaskById = (req, res) => {
-  res.send("getTaskById");
+const newTask = (req, res) => {
+  res.json(req.body);
 };
 
-const newTask = (req, res) => {
-  res.send("make new task");
+const getTaskById = (req, res) => {
+  res.json({ id: req.params.id });
 };
 
 const editTask = (req, res) => {
@@ -17,6 +17,7 @@ const editTask = (req, res) => {
 const removeTask = (req, res) => {
   res.send("delete task");
 };
+
 module.exports = {
   getAllTasks,
   getTaskById,
