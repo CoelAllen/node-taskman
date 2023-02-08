@@ -20,7 +20,11 @@ const getAllTasks = async (req, res) => {
 
 const getTaskById = async (req, res) => {
   try {
-    res.status(200).json(await Task.findById(req.params.id));
+    const task = await Task.findById(req.params.id);
+    res.status(200).json({ task });
+    if (!task) {
+      return res.status(404).json("Task not found");
+    }
   } catch (error) {
     res.status(500).json({ msg: error });
   }
@@ -30,6 +34,9 @@ const editTask = async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body);
     res.status(200).json("Successfully updated");
+    if (!task) {
+      return res.status(404).json("Task not found");
+    }
   } catch (error) {
     res.status(500).json({ msg: error });
   }
@@ -39,6 +46,9 @@ const removeTask = async (req, res) => {
   try {
     const task = await Task.findOneAndDelete(req.params.id);
     res.status(200).json("Task successfully deleted");
+    if (!task) {
+      return res.status(404).json("Task not found");
+    }
   } catch (error) {
     res.status(500).json({ msg: error });
   }
