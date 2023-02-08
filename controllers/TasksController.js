@@ -20,11 +20,12 @@ const getAllTasks = async (req, res) => {
 
 const getTaskById = async (req, res) => {
   try {
-    const task = await Task.findById(req.params.id);
-    res.status(200).json({ task });
+    const { id: taskId } = req.params;
+    const task = await Task.findOne({ _id: taskId });
     if (!task) {
       return res.status(404).json("Task not found");
     }
+    res.status(200).json({ task });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
@@ -32,11 +33,15 @@ const getTaskById = async (req, res) => {
 
 const editTask = async (req, res) => {
   try {
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body);
-    res.status(200).json("Successfully updated");
+    const { id: taskId } = req.params;
+    const task = await Task.findOneAndUpdate({ _id: taskId }, req.body, {
+      new: true,
+      runValidators: true,
+    });
     if (!task) {
       return res.status(404).json("Task not found");
     }
+    res.status(200).json({ task });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
@@ -44,11 +49,12 @@ const editTask = async (req, res) => {
 
 const removeTask = async (req, res) => {
   try {
-    const task = await Task.findOneAndDelete(req.params.id);
-    res.status(200).json("Task successfully deleted");
+    const { id: taskId } = req.params;
+    const task = await Task.findOneAndDelete({ _id: taskId });
     if (!task) {
       return res.status(404).json("Task not found");
     }
+    res.status(200).json("Task successfully deleted");
   } catch (error) {
     res.status(500).json({ msg: error });
   }
